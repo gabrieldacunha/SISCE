@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{%block conteudo%}
+
+
+<div class="scrollable wrapper">
+        <div class="box-info">
+
+
+
+                <div class="widget-content-inner">
+                <h3><b>Informações da compra</b></h3> <hr>
+
+                   <form method= "POST" action ="/lista_compra2/{{participante.id}}/" data-ajax="true" class="form-horizontal row-border" enctype="multipart/form-data"> {% csrf_token %}
+                <br>
+
+
+                    {%for field in local_form%}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{field.label}}</label>
+                            <div class="col-sm-3" style="width:250px;">{{field}}</div>
+                        </div>
+
+                    {%endfor%}
+                    {%for field in vendedor_form%}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{field.label}}</label>
+                            <div class="col-sm-3" style="width:250px;">{{field}}</div>
+                        </div>
+
+                    {%endfor%}
+                <br>
+                <div style ="margin-left:7em">
+                    <button type="submit" class="btn btn-warning" style="margin-top: 8px; width: 150px; border-radius: 1em;">Continuar compra</button>
+                </div>
+            </form>
+                        <br>
+
+
+
+                    </div>
+        </div>
+
+
+
+</div>
+    <br><br><br>
+    <div align="center">
+    <td><a href="/home/"><button type="button" class="btn btn-warning" style="border-radius:1em">Sair da compra</button></a></td>
+    </div><br><br><br><br>
+    </div>
+{%endblock conteudo%}
+</html>

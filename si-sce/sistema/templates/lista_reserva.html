@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{%block conteudo%}
+<div class="scrollable wrapper">
+
+        <div class="box-info">
+        <h3><b>Reservas para </b><i>{{atividade_selecionada.nome}}</i></h3>
+            <hr>
+            <div class="widget-content no-padding" style="overflow-x: auto;">
+                <div class="widget-content-inner">
+                    <table class="display table table-bordered table-striped table-hover dataTable" id="dynamic-table" >
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Telefone</th>
+                                <th>E-mail</th>
+                                <th>Faculdade</th>
+                                <th>Curso</th>
+                                <th>Ano de Ingresso</th>
+                                <th>Editar</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reserva in lista_reservas %}
+                            <tr class="odd gradeA">
+                                <td><a href='/participante_visualizar/{{reserva.participante.id}}'>{{reserva.participante.nome_completo}}</a></td>
+                                <td>{{reserva.participante.telefone}}</td>
+                                <td>{{reserva.participante.e_mail}}</td>
+                                <td>{{reserva.participante.faculdade}}</td>
+                                <td>{{reserva.participante.curso}}</td>
+                                <td>{{reserva.participante.ano_ingresso}}</td>
+                                <td><a href="/editar_reserva/{{reserva.atividade.id}}/{{reserva.participante.id}}"><button type="button" class="btn btn-warning" style="border-radius:1em">Comprar</button></a></td>
+                                <td><a href="/excluir_reserva/{{reserva.atividade.id}}/{{reserva.participante.id}}"><button type="button" class="btn btn-warning" style="border-radius:1em">Excluir</button></a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+    </div>
+
+
+</div>
+</div>
+<div align="center">
+            <a href="/tabela_reservas"><button type="button" class="btn btn-warning" style="border-radius:1em">Voltar</button></a>  <button class="btn btn-warning" type="button" style="border-radius: 1em;"><a href="/emails_reserva/{{atividade_selecionada.id}}" style="text-decoration: none; color: white;">Lista de e-mails</a></button><br><br><br>
+            <button class="btn btn-warning" type="button" style="border-radius: 1em;"><a href="/excluir_reservas_atividade/{{atividade_selecionada.id}}" style="text-decoration: none; color: white;" onclick="return confirm('Tem certeza que deseja excluir todas as reservas?')">Excluir todas as reservas</a></button><br><br><br><br>
+            </div>
+{%endblock conteudo%}
+</html>

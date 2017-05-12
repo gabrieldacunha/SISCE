@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load i18n %}
+{%block conteudo%}
+
+<div class="scrollable wrapper">
+<!--row start-->
+
+
+            <div class="box-info">
+            <h3><b>Cadastro de ponto de venda</b></h3>
+            <hr>
+      <div class="widget-body">
+            <p>
+            <form method= "POST" action ="/pontodevenda_cadastrar/" data-ajax="false" class="form-horizontal" enctype="multipart/form-data"> {% csrf_token %}
+              <br>
+
+              <table>
+              {%for field in pontodevenda_form%}
+                <tr>
+                  <td>{{field.label}}</td>
+                  <td>{{field}}</td>
+                </tr>
+              {%endfor%}
+              </table>
+              <br>
+
+            <div style ="margin-left:6em">
+            <button input type="submit" class="btn btn-warning" style="margin-top: 8px; width: 150px; border-radius: 1em;">Cadastrar</button>
+            </div>
+            </form>
+            </p>
+      </div>
+{%endblock conteudo%}
+</html>

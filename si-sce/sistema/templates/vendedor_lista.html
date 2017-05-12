@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{%block conteudo%}
+
+<div class="scrollable wrapper">
+
+    <div class="box-info">
+        <h3><b>Vendedores cadastrados</b></h3>
+        <hr>
+        <div class="widget-content no-padding" style="overflow-x: auto;">
+            <div class="widget-content-inner">
+                <table class="display table table-bordered table-striped table-hover dataTable" id="tabela-vendedores" >
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Pontuação</th>
+
+
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vendedor in lista_vendedor %}
+                        <tr class="odd gradeA">
+                            <td><a href="/vendedor_clientes/{{vendedor.id}}">{{vendedor.nome}}</a></td>
+                            <td>{{vendedor.pontos}}</td>
+                            <td><a href="/vendedor_editar/{{vendedor.id}}"><button type="button" class="btn btn-warning" style="border-radius:1em">Editar</button></a></td>
+                            <td><a href="/vendedor_excluir/{{vendedor.id}}" OnClick= "return confirm('Tem certeza que quer excluir este cadastro? Esta ação não poderá ser desfeita.')"><button type="button" class="btn btn-warning" style="border-radius:1em">Excluir</button></a></td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<div align="center">
+<a href="/relatorio_vendedores/"><button type="button" class="btn btn-warning" style="border-radius:1em">Gerar relatório</button></a>
+<a href="/limpar_pontos/" OnClick= "return confirm('Tem certeza que deseja zerar os pontos? Já salvou o relatório?')"><button type="button" class="btn btn-warning" style="border-radius:1em">Limpar pontuação</button></a>
+{%endblock conteudo%}</div>
+</html>

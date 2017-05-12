@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{%block conteudo%}
+<style>
+.dataTables_filter {
+    display: none;
+}
+select{
+    width:10em;
+}
+input[type="checkbox"] {
+    height: 30px;
+    width:30px;
+}
+</style>
+
+<div class="scrollable wrapper">
+        <div class="box-info">
+        <form method= "POST" action ="/lista_compra/{{participante_selecionado.id}}/" data-ajax="true" class="form-horizontal" enctype="multipart/form-data"> {% csrf_token %}
+             <h3><b>Ingressos - <a href="/participante_visualizar/{{participante_selecionado.id}}">{{participante_selecionado.nome_completo}}</a></b></h3>
+
+             <hr>
+
+            <div class="widget-content no-padding" style="overflow-x: auto;">
+                <div class="widget-content-inner">
+
+                    <table class="display table table-bordered table-striped dataTable" id="dynamic-table" >
+                        <thead>
+                                <tr>
+                                    <th>Atividade</th>
+                                    <th>Dia</th>
+                                    <th>Horário</th>
+                                    <th>Vagas</th>
+                                    <th>Reservas</th>
+                                    <th>Vendas</th>
+                                    <th>Comprar</th>
+                                    <th>Reservar</th>
+                                    <th>Cortesia</th>
+                                    <th>Local de Venda</th>
+                                    <th>Vendedor</th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for lista in lista_form %}
+                                <tr class="odd gradeA">
+                                    <td>{{lista.0.nome}} ({{lista.0.cap_participantes}})</td>
+                                    <td>{{lista.0.dia}}</td>
+                                    <td>{{lista.0.horario}}</td>
+                                    <td>{{lista.0.cap_atual}}</td>
+                                    <td>{{lista.0.reservas}}</td>
+                                    <td>{{lista.0.vendas}}</td>
+                                    <td>{{lista.1.comprado}}</td>
+                                    <td>{{lista.1.reservado}}</td>
+                                    <td>{{lista.1.cortesia}}</td>
+                                    <td>{{lista.1.local}}</td>
+                                    <td>{{lista.1.vendedor}}</td>
+
+
+
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+                        <br>
+
+
+
+                    </div>
+        </div>
+
+    </div>
+    <div align="center">
+                            <button type="submit" class="btn btn-warning" style="border-radius:1em">Salvar</button></div></form>
+
+
+        {%if lista_comprados %}
+        <div class="box-info">
+        <h3><b>Comprados {{participane_selecionado.nome.capitalize}}</b></h3>
+             <hr>
+            <div class="widget-content no-padding">
+                <div class="widget-content-inner">
+                    <table class="table table-hover" id="table3">
+                        <thead>
+                                <tr>
+                                    <th>Atividade</th>
+                                    <th>Dia</th>
+                                    <th>Horário</th>
+                                    <th>Vendedor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for lista in lista_comprados %}
+                                <tr class="odd gradeA">
+                                    <td>{{lista.atividade}}</td>
+                                    <td>{{lista.atividade.dia}}</td>
+                                    <td>{{lista.atividade.horario}}</td>
+                                    <td>{{lista.vendedor}}
+                                    <!--<td><a href="/aluno_visualizar/{{item.id}}"> Ver Descricao </a></td>
+                                <td><a href="/aluno_deletar/{{item.id}} " OnClick= "return confirm('Tem certeza que quer excluir este cadastro? Esta ação não poderá ser desfeita.')">Excluir</a></td> -->
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+        </div><br>
+        <p align = "center">Valor total: R${{valor}},00 </p>
+    </div>
+    {%endif%}
+    {%if lista_reservados %}
+    <div class="box-info">
+        <h3><b>Reservados {{participane_selecionado.nome.capitalize}}</b></h3>
+             <hr>
+            <div class="widget-content no-padding">
+                <div class="widget-content-inner">
+                    <table class="table table-hover" id="table3">
+                        <thead>
+                                <tr>
+                                    <th>Atividade</th>
+                                    <th>Dia</th>
+                                    <th>Horário</th>
+                                    <th>Vendedor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for lista in lista_reservados %}
+                                <tr class="odd gradeA">
+                                    <td>{{lista.atividade}}</td>
+                                    <td>{{lista.atividade.dia}}</td>
+                                    <td>{{lista.atividade.horario}}</td>
+                                    <td>{{lista.vendedor}}
+                                    <!--<td><a href="/aluno_visualizar/{{item.id}}"> Ver Descricao </a></td>
+                                <td><a href="/aluno_deletar/{{item.id}} " OnClick= "return confirm('Tem certeza que quer excluir este cadastro? Esta ação não poderá ser desfeita.')">Excluir</a></td> -->
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+        </div>
+    </div>
+    {%endif%}
+    {%if lista_cortesia %}
+    <div class="box-info">
+        <h3><b>Cortesia {{participane_selecionado.nome.capitalize}}</b></h3>
+             <hr>
+            <div class="widget-content no-padding">
+                <div class="widget-content-inner">
+                    <table class="table table-hover" id="table3">
+                        <thead>
+                                <tr>
+                                    <th>Atividade</th>
+                                    <th>Dia</th>
+                                    <th>Horário</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for lista in lista_cortesia %}
+                                <tr class="odd gradeA">
+                                    <td>{{lista.atividade}}</td>
+                                    <td>{{lista.atividade.dia}}</td>
+                                    <td>{{lista.atividade.horario}}</td>
+                                    <!--<td><a href="/aluno_visualizar/{{item.id}}"> Ver Descricao </a></td>
+                                <td><a href="/aluno_deletar/{{item.id}} " OnClick= "return confirm('Tem certeza que quer excluir este cadastro? Esta ação não poderá ser desfeita.')">Excluir</a></td> -->
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+        </div>
+    </div>
+    {%endif%}<br>
+
+    <br><br><br>
+    <div align="center">
+    <td><a href="/home/"><button type="button" class="btn btn-warning" style="border-radius:1em">Sair da compra</button></a></td>
+    </div><br><br><br><br>
+    </div>
+{%endblock conteudo%}
+</html>

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{%block conteudo%}
+
+<div class="scrollable wrapper">
+
+        <div class="box-info">
+             <h3><b>Atividades reservadas</b></h3>
+            <hr>
+            <div class="widget-content no-padding" style="overflow-x: auto;">
+                <div class="widget-content-inner">
+                    <table class="display table table-bordered table-striped table-hover dataTable" id="dynamic-table" >
+                        <thead>
+
+                            <tr>
+                                <th>Nome</th>
+                                <th>Dia</th>
+                                <th>Horario</th>
+                                <th>Vagas</th>
+                                <th>Reservas</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for atividade in atividade_lista %}
+                            <tr class="odd gradeA">
+                                <td><a href="/lista_reserva/{{atividade.id}}">{{atividade.nome}}</a></td>
+                                <td>{{atividade.dia}}</td>
+                                <td>{{atividade.horario}}</td>
+                                <td>{{atividade.cap_atual}}</td>
+                                <td>{{atividade.reservas}}</td>
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+    </div>
+
+</div>
+</div>
+{%if adm%}
+<div align = "center">
+<a href="/excluir_reservas/" onclick="return confirm('Tem certeza que deseja excluir todas as reservas?')">
+<button input type="button" class="btn btn-warning" style="margin-top: 8px; width: 200px; border-radius: 1em;">Excluir todas as reservas</button></a>
+</div>{%endif%}
+{%endblock conteudo%}
+</html>

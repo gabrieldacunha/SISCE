@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{%block conteudo%}
+
+<div class="scrollable wrapper">
+
+        <div class="box-info">
+            <h3><b>Pontos de venda cadastrados</b></h3>
+            <hr>
+            <div class="widget-content no-padding">
+                <div class="widget-content-inner">
+                    <table class="display table table-bordered table-striped table-hover dataTable" id="dynamic-table" >
+                        <thead>
+                            <tr>
+                                <th>Pontos de venda</th>
+                                <th> </th>
+                                {%if adm%}
+                                <th> </th>
+                                {%endif%}
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pontodevenda in lista_pontodevenda %}
+                            <tr>
+                                <td><a href="/participante_dinamica4/{{pontodevenda.id}}">{{pontodevenda.nome}}</a></td>
+                                <td><a href="/pontodevenda_editar/{{pontodevenda.id}}"><button type="button" class="btn btn-warning" style="border-radius:1em">Editar</button></a></td>
+                                {%if adm%}
+                                <td><a href="/pontodevenda_excluir/{{pontodevenda.id}}" OnClick= "return confirm('Tem certeza que quer excluir este cadastro? Esta ação não poderá ser desfeita.')"><button type="button" class="btn btn-warning" style="border-radius:1em">Excluir</button></a></td>
+                                {%endif%}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+    </div>
+</div>
+</div>
+{%endblock conteudo%}
+</html>

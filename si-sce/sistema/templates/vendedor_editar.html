@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{%block conteudo%}
+<div class="scrollable wrapper">
+    <div class="box-info">
+      <h3><b>Editar vendedor</b></h3>
+      <hr>
+      <div class="widget-body">
+        <form method= "POST" action ="/vendedor_editar/{{vendedor.id}}/" data-ajax="false" class="form-horizontal"  enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <table>
+        {%for field in vendedor_editar%}
+          <tr>
+            <td>{{field.label}}</td>
+            <td>{{ field }}</td>
+          </tr>
+        {%endfor%}
+        </table><br>
+        <a href="/vendedor_lista/"><button type="button" class="btn btn-warning" style="border-radius:1em">Voltar</button></a>
+        <button input type="submit" class="btn btn-warning" style="border-radius:1em">Salvar</button>
+
+        </form>
+      </div>
+
+</div>
+{%endblock conteudo%}
+</html>

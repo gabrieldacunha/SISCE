@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n %}
+{%block conteudo%}
+
+<div class="scrollable wrapper">
+<!--row start-->
+
+
+            <div class="box-info">
+            <h3><b>Enviar e-mail</b></h3>
+                      <hr>
+              <div class="widget-body">
+                    <p>
+                    <form method= "POST" action ="" data-ajax="false" class="form-horizontal" enctype="multipart/form-data"> {% csrf_token %}
+                      <br>
+
+                      <table>
+                      {%for field in email_enviar%}
+                        <tr>
+                          <td>{{field.label}}</td>
+                          <td>{{field}}</td>
+                        </tr>
+                      {%endfor%}
+                      </table>
+
+                    <button input type="submit" class="btn btn-warning" style="margin-top: 8px; width: 150px;">Enviar</button>
+
+
+                    </form>
+                    </p>
+
+      </div>
+</div>
+{%endblock conteudo%}
+</html>

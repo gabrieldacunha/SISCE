@@ -1,0 +1,276 @@
+{% load i18n %}
+<!DOCTYPE html>
+<head>
+<title>SCE</title>
+<link rel="shortcut icon" href="/static/images/logosce.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap -->
+<link href="/static/bs3/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/css/style-responsive.css" rel="stylesheet">
+<link href="/static/css/atom-style.css" rel="stylesheet">
+<link href="/static/css/font-awesome.min.css" rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+<!--data-table css-->
+<link href="/static/plugins/data-tables/DT_bootstrap.css" rel="stylesheet">
+<link href="/static/plugins/advanced-datatable/css/demo_table.css" rel="stylesheet">
+<link href="/static/plugins/advanced-datatable/css/demo_page.css" rel="stylesheet">
+<link href="/static/css/animate.css" rel="stylesheet">
+<link href="/static/plugins/scroll/nanoscroller.css" rel="stylesheet">
+
+<!-- <link rel="stylesheet" type="text/css" href="/static/plugins/bootstrap-datepicker/css/datepicker.css" /> -->
+<!-- <link rel="stylesheet" type="text/css" href="/static/plugins/bootstrap-timepicker/compiled/timepicker.css" /> -->
+<!-- <link rel="stylesheet" type="text/css" href="/static/plugins/bootstrap-colorpicker/css/colorpicker.css" /> -->
+<link rel="stylesheet" type="text/css" href="/static/plugins/jquery-multi-select/css/multi-select.css" />
+<link rel="stylesheet" type="text/css" href="/static/plugins/tag-input/jquery.tagsinput.css" />
+<link rel="stylesheet" type="text/css" href="/static/plugins/icheck/red.css" />
+<link rel="stylesheet" type="text/css" href="/static/plugins/form-wizard/styles/smart_wizard.css" />
+
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<!--layout-container start-->
+<div id="layout-container">
+  <!--Left navbar start-->
+  <div id="nav">
+    <!--logo start-->
+    <div class="profile" align="center">
+      <div><a href="/home/"><img src="/static/images/logosce.png" style="height: 45px; width: 45px; margin-bottom:12px;margin-top:12px;"></a></div>
+
+    </div>
+    <!--logo end-->
+    <!--navigation start-->
+    <ul class="navigation">
+
+       <!-- <li>
+        <a href="/home/">
+          <i class="fa fa-home"></i>
+          <span>Home</span>
+        </a>
+      </li>-->
+      <li class="sub">
+        <a href="/participante_dinamica/"><i class="fa fa-user"></i>
+          <span>Participantes</span>
+        </a>
+        <ul class="navigation-sub" style="width:207px">
+          <li >
+            <a href="/participante_dinamica/">
+              <i class="fa fa-list-ul"></i>
+              <span>Lista de participantes</span>
+            </a>
+          </li>
+          <li>
+            <a href="/participante_cadastrar/">
+              <i class="fa fa-pencil"></i>
+              <span>Cadastrar participante</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- <li>
+        <a href="/tabela_reservas/">
+          <i class="fa fa-edit"></i>
+          <span>Reservas</span>
+        </a>
+      </li>
+       -->
+      <li class="sub">
+        <a href="/atividade_lista/">
+          <i class="fa fa-list-alt"></i>
+          <span>Atividades</span>
+        </a>
+        <ul class="navigation-sub">
+          <li>
+            <a href="/atividade_lista/">
+              <i class="fa fa-list-ul"></i>
+              <span>Lista de atividades</span>
+            </a>
+          </li>
+          {%if adm%}
+          <li>
+            <a href="/atividade_cadastrar/">
+              <i class="fa fa-pencil"></i>
+              <span>Cadastrar atividade</span>
+            </a>
+          </li>
+          <li>
+            <a href="/pontodevenda_lista/">
+              <i class="fa fa-fa fa-list-ul"></i>
+              <span>Lista de pontos de venda</span>
+            </a>
+          </li>
+          <li>
+            <a href="/pontodevenda_cadastrar/">
+              <i class="fa fa-pencil"></i>
+              <span>Cadastrar ponto de venda</span>
+            </a>
+          </li>
+          <li>
+          {%endif%}
+        </ul>
+      </li>
+
+      <li class="sub">
+        <a href="/faculdade_lista/">
+          <i class="fa fa-book"></i>
+          <span>Faculdades</span>
+        </a>
+        <ul class="navigation-sub">
+          <li>
+            <a href="/faculdade_lista/">
+              <i class="fa fa-fa fa-list-ul"></i>
+              <span>Lista de faculdades</span>
+            </a>
+          </li>
+          <li>
+            <a href="/faculdade_cadastrar/">
+              <i class="fa fa-pencil"></i>
+              <span>Cadastrar faculdade</span>
+            </a>
+          </li>
+          <li>
+            <a href="/curso_lista/">
+              <i class="fa fa-fa fa-list-ul"></i>
+              <span>Lista de cursos</span>
+            </a>
+          </li>
+          <li>
+            <a href="/curso_cadastrar/">
+              <i class="fa fa-pencil"></i>
+              <span>Cadastrar curso</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      {%if adm%}
+      <li class="sub">
+        <a href="/vendedor_lista/">
+          <i class="fa fa-users"></i>
+          <span>Vendedores</span>
+        </a>
+        <ul class="navigation-sub">
+          <li>
+            <a href="/vendedor_lista/">
+              <i class="fa fa-fa fa-list-ul"></i>
+              <span>Lista de vendedores</span>
+            </a>
+          </li>
+          <li>
+            <a href="/vendedor_cadastrar/">
+              <i class="fa fa-pencil"></i>
+              <span>Cadastrar vendedor</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="/tabela_relatorios/">
+          <i class="fa fa-bar-chart-o"></i>
+          <span>Relatórios</span>
+        </a>
+      </li>
+      {%endif%}
+      <li>
+
+        <a href="/logout/">
+          <i class="fa fa-power-off"></i>
+          <span>Logout</span>
+        </a>
+      </li>
+    </ul>
+    <!--navigation end-->
+  </div>
+  <!--Left navbar end-->
+  <!-- main start-->
+  <div id="main">
+    <!-- head-title start-->
+    <div class="head-title">
+      <div class="menu-switch">
+        <i class="fa fa-bars"></i>
+      </div>
+      <!-- row start-->
+      <div class="row">
+        <!--col-md-12 start-->
+        <div class="col-md-12">
+
+          <!--profile dropdown start-->
+
+
+        </div>
+        <!--col-md-12 end-->
+      </div>
+      <!-- row end-->
+
+    </div>
+    <!-- head-title end-->
+
+      <!-- Start Main Content -->
+    <div class="row-fluid">
+      <div class="span12">
+
+        {% block conteudo %}
+
+        {% endblock conteudo %}
+      </div> <!-- span 12 -->
+    </div>
+  </div>
+</div>
+
+
+
+    <!-- End -->
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="/static/js/jquery-1.10.2.js"></script>
+<script src="/static/js/jquery-ui-1.9.1.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/static/bs3/js/bootstrap.min.js"></script>
+<script src="/static/js/smooth-sliding-menu.js"></script>
+<script src="/static/plugins/data-tables/DT_bootstrap.js"></script>
+<script src="/static/plugins/data-tables/jquery.dataTables.js"></script>
+<script src="/static/plugins/data-tables/dynamic_table_init.js"></script>
+
+<script src="/static/js/jPushMenu.js"></script>
+<script src="/static/js/side-chats.js"></script>
+<script src="/static/plugins/scroll/jquery.nanoscroller.js"></script>
+
+<script src="js/console-numbering.js"></script>
+<script src="js/to-do-admin.js"></script>
+<script src="js/jquery.sparkline.js"></script>
+<script src="js/sparkline-chart.js"></script>
+<script src="js/select-checkbox.js"></script>
+
+<!-- <script type="text/javascript" src="/static/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> -->
+<!-- <script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script> -->
+<!-- <script type="text/javascript" src="/static/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script> -->
+<!-- <script type="text/javascript" src="/static/plugins/bootstrap-timepicker/js/bootstrap-timepicker.js"></script> -->
+<script src="/static/plugins/jquery-multi-select/js/jquery.multi-select.js"></script>
+<script src="/static/plugins/jquery-multi-select/js/jquery.quicksearch.js"></script>
+<script src="/static/js/form-components.js"></script>
+<script src="/static/plugins/ckeditor/ckeditor.js"></script>
+<script src="/static/plugins/tag-input/jquery.tagsinput.js"></script>
+<script src="/static/plugins/tag-input/taginput-edit.js"></script>
+<script src="/static/plugins/icheck/icheck.js"></script>
+
+<!-- </body>
+<script>
+
+  $(document).ready(function(){
+    $('.skin-section input').iCheck({
+      checkboxClass: 'icheckbox_flat-red',
+      radioClass: 'iradio_flat-red'
+    });
+  });
+
+
+ </script>
+
+</body> -->
+
+</html>

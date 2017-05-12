@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block conteudo %}
+
+<div class="scrollable wrapper">
+
+        <div class="box-info">
+             <h3><b>Relatórios</b></h3>
+
+
+    	<hr>
+        Dinheiro arrecadado: R$ {{dinheiro}},00<br>
+        <!-- Reservas: {{num_reservados}} (R$ {{previsao}},00)<br> -->
+        Cortesias (doações): {{num_cortesias}} (R$ {{valor_cortesias}},00)<br>
+        Vendas online: {{num_site}} (R$ {{valor_site}},00) <br>
+        Ingressos distribuidos: {{ingressos}}<br>
+        Presenças em atividades: {{presencas}} ({{abstencao}}% de abstenção)
+        <hr>
+        Número de cadastros: {{cadastrados}}<br>
+        Pegaram ingressos: {{tem_ingressos}} ({{porcentagem_ingressos}}%)<br>
+        Compareceram em atividades: {{compareceram}}<br><br>
+        Marcados que pegaram moleskine: {{moleskines}}<br>
+        Marcados que pegaram mochila: {{mochilas}}<br>
+        Podem retirar mochila: {{candidatos_mochila}}<br>
+
+        Querem saber sobre a ONG: {{num_ong}} ({{porcentagem_ong}}% dos cadastrados)<br>
+        Mailing list: {{num_mailing}} ({{porcentagem_mailing}}% dos cadastros)
+        <hr><br>
+        <button class="btn btn-warning" type="button" style="border-radius: 1em;"><a href="/relatorio_geral/" style="text-decoration: none; color: white;">Baixar relatório geral</a></button><br>
+        <hr>
+        <a href="/lista_ong/">Baixar lista de emails de quem se interessou pela ONG</a><br><br>
+        <a href="/lista_mailing/">Baixar Mailing List</a><br><br>
+        <a href="/lista_canecas/">Baixar lista de emails de quem comprou atividade e não ganhou brinde</a> ({{sem_brinde}})
+        </div></div>
+
+{% endblock conteudo %}

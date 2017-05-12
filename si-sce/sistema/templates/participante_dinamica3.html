@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{%block conteudo%}
+<div class="scrollable wrapper">
+
+        <div class="box-info">
+        <h3><b>Participantes do curso <i>{{curso}}</i></b></h3>
+            <hr>
+            <div class="widget-content no-padding" style="overflow-x: auto;">
+                <div class="widget-content-inner">
+                    <table class="display table table-bordered table-striped table-hover dataTable" id="tabela-participantes">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Telefone</th>
+                                <th>E-mail</th>
+                                <th>Faculdade</th>
+                                <th>Ano de ingresso</th>
+                                <th>Atividades</th>
+                                <th>Participou</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for participante in lista_participante %}
+                            <tr class="odd gradeA">
+                                <td><a href='/participante_visualizar/{{participante.id}}'>{{participante.nome_completo}}</a></td>
+                                <td>{{participante.telefone}}</td>
+                                <td>{{participante.e_mail}}</td>
+                                <td>{{participante.faculdade}}</td>
+                                <td>{{participante.ano_ingresso}}</td>
+                                <td>{{participante.atividades}}</td>
+                                <td>{{participante.presencas}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+    </div>
+</div>
+{%endblock conteudo%}
+</html>

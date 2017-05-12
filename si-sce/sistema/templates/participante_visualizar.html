@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{%block conteudo%}
+
+      <div class="scrollable wrapper">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="page-heading">
+              <h1><b>{{participante.nome_completo}}</b></h1>
+              <hr>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+        <div class="row">
+                  <div class="profile-nav col-lg-3">
+                      <div class="panel">
+                          <ul class="nav nav-pills nav-stacked">
+                              <li><a href="/lista_compra/{{participante.id}}"> <i class="icon-edit"></i> Editar compra</a></li>
+                              <li><a href="/participante_editar/{{participante.id}}"> <i class="icon-edit"></i> Editar dados pessoais</a></li>
+                              {%if adm%}
+                              <li><a href="/participante_excluir/{{participante.id}}" OnClick= "return confirm('Tem certeza que quer excluir este cadastro? Esta ação não poderá ser desfeita.')"> <i class="icon-edit"></i> Excluir participante</a></li>{%endif%}
+                              <li><a href="/participante_dinamica/"> <i class="icon-edit"></i> Voltar</a></li>
+                          </ul>
+
+                      </div>
+                  </div>
+                  <div class="profile-info col-lg-9">
+
+                      <div class="panel">
+                          <div class="panel-body bio-graph-info">
+                              <h1>Dados pessoais</h1>
+                              <div class="row">
+                                  <div class="bio-row">
+                                      <p><span>Telefone: </span> {{participante.telefone}}</p>
+                                  </div>
+                                  <div class="bio-row">
+                                      <p><span>E-mail: </span> {{participante.e_mail}}</p>
+                                  </div>
+                                  <div class="bio-row">
+                                      <p><span>Faculdade: </span> {{participante.faculdade}}</p>
+                                  </div>
+                                  <div class="bio-row">
+                                      <p><span>Curso: </span> {{participante.curso}}</p>
+                                  </div>
+                                  <div class="bio-row">
+                                      <p><span>Ingresso: </span> {{participante.ano_ingresso}}</p>
+                                  </div>
+
+                                  {%if moleskine%}
+                                    <div class="bio-row">
+                                      <p> Já possui moleskine.</p>
+                                    </div>
+                                  {%else%}
+                                    <div class="bio-row">
+                                    <p> Não possui moleskine.</p>
+                                    </div>
+
+                                  {%endif%}
+
+                                  {%if mochila%}
+                                    <div class="bio-row">
+                                      <p> Já possui mochila.</p>
+                                    </div>
+                                  {%else%}
+                                    <div class="bio-row">
+                                    <p> Não possui mochila.</p>
+                                    </div>
+
+                                  {%endif%}
+
+                                  {%if divulgacao%}
+                                  <div class="bio-row">
+                                    <p> Aceita divulgação de dados.</p>
+                                    </div>
+                                  {%else%}
+                                  <div class="bio-row">
+                                    <p> Não aceita divulgação de dados. </p>
+                                    </div>
+                                  {%endif%}
+
+                                  {%if ong%}
+                                  <div class="bio-row">
+                                    <p> Quer saber sobre a ONG.</p>
+                                    </div>
+                                  {%else%}
+                                  <div class="bio-row">
+                                    <p> Não quer saber sobre a ONG. </p>
+                                    </div>
+                                  {%endif%}
+
+                          </div>
+                      </div>
+                  </div>
+                  <div class="profile-info col-lg-9">
+                    {%if lista_comprados %}
+                      <div class="panel">
+                      <hr>
+                        <div class="panel-body bio-graph-info">
+                            <table class="table table-hover" id="table3">
+                              <thead>
+                                  <tr>
+                                      <th>Atividades compradas</th>
+                                      <th>Dia</th>
+                                      <th>Horário</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  {% for lista in lista_comprados %}
+                                  <tr class="odd gradeA">
+                                      <td>{{lista.atividade}}</td>
+                                      <td>{{lista.atividade.dia}}</td>
+                                      <td>{{lista.atividade.horario}}</td>
+                                      <!--<td><a href="/aluno_visualizar/{{item.id}}"> Ver Descricao </a></td>
+                                  <td><a href="/aluno_deletar/{{item.id}} " OnClick= "return confirm('Tem certeza que quer excluir este cadastro? Esta ação não poderá ser desfeita.')">Excluir</a></td> -->
+                                  </tr>
+                                  {% endfor %}
+                              </tbody>
+                            </table>
+                        </div>
+                      </div>
+                      {%endif%}
+                      {%if lista_cortesia %}
+                      <div class="panel">
+                        <div class="panel-body bio-graph-info">
+                            <table class="table table-hover" id="table3">
+                              <thead>
+                                  <tr>
+                                      <th>Atividades cortesia</th>
+                                      <th>Dia</th>
+                                      <th>Horário</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  {% for lista in lista_cortesia %}
+                                  <tr class="odd gradeA">
+                                      <td>{{lista.atividade}}</td>
+                                      <td>{{lista.atividade.dia}}</td>
+                                      <td>{{lista.atividade.horario}}</td>
+                                      <!--<td><a href="/aluno_visualizar/{{item.id}}"> Ver Descricao </a></td>
+                                  <td><a href="/aluno_deletar/{{item.id}} " OnClick= "return confirm('Tem certeza que quer excluir este cadastro? Esta ação não poderá ser desfeita.')">Excluir</a></td> -->
+                                  </tr>
+                                  {% endfor %}
+                              </tbody>
+                            </table>
+                        </div>
+                      </div>
+                      {%endif%}
+                      {%if lista_reservados %}
+                      <div class="panel">
+                        <div class="panel-body bio-graph-info">
+                            <table class="table table-hover" id="table3">
+                              <thead>
+                                  <tr>
+                                      <th>Atividades reservadas</th>
+                                      <th>Dia</th>
+                                      <th>Horário</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  {% for lista in lista_reservados %}
+                                  <tr class="odd gradeA">
+                                      <td>{{lista.atividade}}</td>
+                                      <td>{{lista.atividade.dia}}</td>
+                                      <td>{{lista.atividade.horario}}</td>
+                                      <!--<td><a href="/aluno_visualizar/{{item.id}}"> Ver Descricao </a></td>
+                                  <td><a href="/aluno_deletar/{{item.id}} " OnClick= "return confirm('Tem certeza que quer excluir este cadastro? Esta ação não poderá ser desfeita.')">Excluir</a></td> -->
+                                  </tr>
+                                  {% endfor %}
+                              </tbody>
+                            </table>
+                        </div>
+                      </div>
+                    {%endif%}
+                  </div>
+              </div>
+
+        </div>
+
+{%endblock%}
+

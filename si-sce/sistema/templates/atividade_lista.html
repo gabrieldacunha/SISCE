@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{%block conteudo%}
+
+
+
+<div class="scrollable wrapper">
+
+        <div class="box-info">
+             <h3><b>Atividades cadastradas</b></h3>
+            <hr>
+            <div class="widget-content no-padding" style="overflow-x: auto;">
+                <div class="widget-content-inner">
+                    <table class="display table table-bordered table-striped table-hover dataTable" id="tabela-atividades" >
+                        <thead>
+
+                            <tr style >
+                                <th>Atividade</th>
+                                <th>Dia</th>
+                                <th>Horario</th>
+                                <th>Vagas</th>
+
+                                <th>Reservas</th>
+                                <th>Valor</th>
+                                <th>Vendas</th>
+                                <th>Pontos</th>
+                                <th>Overbooking</th>
+                                <th></th>
+                                {%if adm%}
+                                <th></th>
+                                <th></th>
+                                {%endif%}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for atividade in atividade_lista %}
+                            <tr class="odd gradeA">
+                                <td>{{atividade.nome}}</td>
+                                <td>{{atividade.dia}}</td>
+                                <td>{{atividade.horario}}</td>
+                                <td>{{atividade.cap_atual}}</td>
+
+                                <td>{{atividade.reservas}}</td>
+                                <td>R$ {{atividade.preco}},00</td>
+                                <td>{{atividade.vendas}}</td>
+                                <td>{{atividade.pont_vendas}}</td>
+                                <td>{{atividade.overbooking}}</td>
+                                <td><a href="/lista_presenca/{{atividade.id}}"><button type="button" class="btn btn-warning" style="border-radius:1em">Lista de presença</button></a></td>
+                                {%if adm%}
+                                <td><a href="/atividade_editar/{{atividade.id}}"><button type="button" class="btn btn-warning" style="border-radius:1em">Editar</button></a></td>
+                                <td><a href="/atividade_excluir/{{atividade.id}}" OnClick= "return confirm('Tem certeza que quer excluir este cadastro? Esta ação não poderá ser desfeita.')"><button type="button" class="btn btn-warning" style="border-radius:1em">Excluir</button></a></td>
+                                {%endif%}
+                                <!--<td><a href="/aluno_visualizar/{{item.id}}"> Ver Descricao </a></td>
+                                <td><a href="/aluno_deletar/{{item.id}} " OnClick= "return confirm('Tem certeza que quer excluir este cadastro? Esta ação não poderá ser desfeita.')">Excluir</a></td> -->
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+    </div>
+</div>
+
+{%endblock conteudo%}
+</html>

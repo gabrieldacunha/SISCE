@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n %}
+{%block conteudo%}
+
+<div class="scrollable wrapper">
+<!--row start-->
+
+
+<div class="box-info">
+    <h3><b>Cadastro de participante</b></h3>
+    <hr>
+    <div class="widget-body">
+        <p>
+            <form method= "POST" action ="/participante_cadastrar/" data-ajax="false" class="form-horizontal row-border" enctype="multipart/form-data"> {% csrf_token %}
+                <br>
+
+
+                    {%for field in participante_form%}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{field.label}}</label>
+                            <div class="col-sm-3" style="width:250px;">{{field}}</div>
+                        </div>
+
+                    {%endfor%}
+                <br>
+                <div style ="margin-left:7em">
+                    <button input type="submit" class="btn btn-warning" id= "test" style="margin-top: 8px; width: 150px; border-radius: 1em;">Cadastrar</button>
+                </div>
+            </form>
+        </p>
+    </div>
+</div>
+<script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.maskedinput.min.js"></script>
+
+<script type="text/javascript">
+$("#id_telefone").mask("(99)99999-9999",{placeholder:"(  )     -    "});
+$("#id_ano_ingresso").mask("9999",{placeholder:""});
+$("#test").click(function() {
+    var all = true;
+    var x = 0;
+    var y = $(':input:text').length;
+    $(':input:text').each(function() {
+        if (this.value == "") {
+          x = x + 1;
+          all = false;
+        }
+    });
+    if (all) return true;
+    alert("Existem campos vazios!");
+    return false;
+});
+
+</script>
+{%endblock conteudo%}
+</html>
