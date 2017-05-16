@@ -40,8 +40,8 @@ urlpatterns = patterns('',
     url(r'^pontodevenda_excluir/(?P<id_pontodevenda>[0-9]+)/$', views.pontodevenda_excluir),
     url(r'^pontodevenda_lista/$', views.pontodevenda_listar),
     url(r'^pontodevenda_editar/(?P<id_pontodevenda>[0-9]+)/$', views.pontodevenda_editar),
-    url(r'^emails_reserva/(?P<id_atividade>[0-9]+)/$', views.emails_reserva),
-     url(r'^participante_dinamica4/(?P<id_local>[0-9]+)/$', views.participante_dinamica4),
+    #url(r'^emails_reserva/(?P<id_atividade>[0-9]+)/$', views.emails_reserva),
+    url(r'^participante_dinamica4/(?P<id_local>[0-9]+)/$', views.participante_dinamica4),
 
     #Participante
     url(r'^participante_cadastrar/$', views.participante_cadastrar),

@@ -83,7 +83,8 @@ def participante_cadastrar(request):
 			#print(lista_atividades)
 			tamanho_lista_atividades = len(lista_atividades)
 			for atividade in lista_atividades:
-				compra = Compra(participante = participante, atividade = atividade, comprado = False, reservado = False, cortesia = False)
+				#foi retirado o reservado = False:
+				compra = Compra(participante = participante, atividade = atividade, comprado = False, cortesia = False)
 				compra.save()
 			return HttpResponseRedirect('/lista_compra/%s' % str(participante.id))
 		except:
@@ -149,16 +150,16 @@ def participante_visualizar(request, id_participante):
 	participante = Participante.objects.get(id = id_participante)
 	lista_comprados = Compra.objects.filter(participante = participante).filter(comprado=True)
 	lista_cortesia = Compra.objects.filter(participante = participante).filter(cortesia=True)
-	lista_reservados = Compra.objects.filter(participante = participante).filter(reservado=True)
+	#lista_reservados = Compra.objects.filter(participante = participante).filter(reservado=True)
 	if participante.moleskine ==True:
 		moleskine = True
 	else:
 		moleskine = False
 
-	if participante.mochila == True:
-		mochila = True
+	if participante.lancheira == True:
+		lancheira = True
 	else:
-		mochila = False
+		lancheira = False
 	if participante.aceita_divulgacao == True:
 		divulgacao = True
 	else:
@@ -646,7 +647,7 @@ def lista_compra(request, id_participante):
 	lista_itens = Compra.objects.filter(participante = participante_selecionado)
 	lista_comprados = Compra.objects.filter(participante = participante_selecionado).filter(comprado=True)
 	lista_cortesia = Compra.objects.filter(participante = participante_selecionado).filter(cortesia=True)
-	lista_reservados = Compra.objects.filter(participante = participante_selecionado).filter(reservado=True)
+	#lista_reservados = Compra.objects.filter(participante = participante_selecionado).filter(reservado=True)
 	lista_form = []
 	valor = 0
 
@@ -664,10 +665,11 @@ def lista_compra(request, id_participante):
 				for compra2 in lista_itens:
 					lista_form.append([compra2.atividade, CompraForm(instance = compra2, prefix=str(compra2.atividade.id))])
 				compra = compra_form.save()
+				# foi retirado or (compra.comprado==True and compra.reservado==True) or (compra.reservado==True and compra.cortesia==True) :
 
-				if (compra.comprado==True and compra.reservado==True) or (compra.comprado==True and compra.cortesia==True) or (compra.reservado==True and compra.cortesia==True):
+				if (compra.comprado==True and compra.cortesia==True):
 					compra.comprado=False
-					compra.reservado = False
+					#compra.reservado = False
 					compra.cortesia = False
 					compra.save()
 
@@ -683,9 +685,10 @@ def lista_compra(request, id_participante):
 				for compra2 in lista_itens:
 					lista_form.append([compra2.atividade, CompraForm(instance = compra2, prefix=str(compra2.atividade.id))])
 				compra = compra_form.save()
-				if compra.comprado==True or compra.reservado==True or compra.cortesia==True:
+				# foi retirado compra.reservado ==True
+				if compra.comprado==True or compra.cortesia==True:
 					compra.comprado = False
-					compra.reservado = False
+					#compra.reservado = False
 					compra.cortesia = False
 					compra.save()
 					return HttpResponse("<script>alert('Atividade lotada!');javascript:history.back();</script>")
@@ -722,13 +725,13 @@ def tabela_relatorios(request):
 		porcentagem_mailing = 0
 	tem_ingressos = 0
 	moleskines = 0
-	mochilas = 0
-	candidatos_mochila = 0
+	lancheiras = 0
+	candidatos_lancheira = 0
 	for participante in participantes:
 		if participante.moleskine:
 			moleskines += 1
-		if participante.mochila:
-			mochilas += 1
+		if participante.lancheira:
+			lancheiras += 1
 
 		pagou = Compra.objects.filter(participante = participante, comprado =True).count()
 		ganhou = Compra.objects.filter(participante = participante, cortesia =True).count()
@@ -737,7 +740,7 @@ def tabela_relatorios(request):
 		if pegou_atividade > 0:
 			tem_ingressos+=1
 		if pegou_atividade > 4:
-			candidatos_mochila += 1
+			candidatos_lancheira += 1
 
 	try:
 		porcentagem_ingressos = 100*tem_ingressos/cadastrados
@@ -745,10 +748,10 @@ def tabela_relatorios(request):
 		porcentagem_ingressos = 0
 	presencas = Compra.objects.filter(presente=True).count()
 	lista_comprados = Compra.objects.filter(comprado=True)
-	lista_reservados = Compra.objects.filter(reservado=True)
+	#lista_reservados = Compra.objects.filter(reservado=True)
 	lista_cortesias = Compra.objects.filter(cortesia=True)
 	num_site = Compra.objects.filter(cortesia=True, local__id = 3).count()
-	num_reservados = Compra.objects.filter(reservado=True).count()
+	#num_reservados = Compra.objects.filter(reservado=True).count()
 
 	dinheiro = 0
 	previsao = 0
@@ -756,8 +759,8 @@ def tabela_relatorios(request):
 	valor_site = 0
 	for comprado in lista_comprados:
 		dinheiro+=comprado.atividade.preco
-	for reservado in lista_reservados:
-		previsao+=reservado.atividade.preco
+	# for reservado in lista_reservados:
+	# 	previsao+=reservado.atividade.preco
 	for cortesia in lista_cortesias:
 		try:
 			if cortesia.local.id != 3:
@@ -786,26 +789,26 @@ def tabela_relatorios(request):
 			pass
 	return render(request, 'tabela_relatorios.html', locals())
 
-@login_required
-@permission_required('sistema.is_admin')
-def emails_reserva (request, id_atividade):
-	atividade_selecionada = Atividade.objects.get(id = id_atividade)
-	compras = Compra.objects.filter(reservado=True, atividade = atividade_selecionada)
-	lista_emails = []
+# @login_required
+# @permission_required('sistema.is_admin')
+# def emails_reserva (request, id_atividade):
+# 	atividade_selecionada = Atividade.objects.get(id = id_atividade)
+# 	compras = Compra.objects.filter(reservado=True, atividade = atividade_selecionada)
+# 	lista_emails = []
 
-	for compra in compras:
-		lista_emails.append(compra.participante.e_mail + "; ")
+# 	for compra in compras:
+# 		lista_emails.append(compra.participante.e_mail + "; ")
 
-	workbook = xlwt.Workbook()
-	worksheet = workbook.add_sheet(u'Cobrança de reserva')
+# 	workbook = xlwt.Workbook()
+# 	worksheet = workbook.add_sheet(u'Cobrança de reserva')
 
-	worksheet.write(0, 0, u'Emails')
+# 	worksheet.write(0, 0, u'Emails')
 
-	worksheet.write(1, 0, lista_emails)
-	response = HttpResponse(mimetype='application/vnd.ms-excel')
-	response['Content-Disposition'] = 'attachment; filename=reservas.xls'
-	workbook.save(response)
-	return response
+# 	worksheet.write(1, 0, lista_emails)
+# 	response = HttpResponse(mimetype='application/vnd.ms-excel')
+# 	response['Content-Disposition'] = 'attachment; filename=reservas.xls'
+# 	workbook.save(response)
+# 	return response
 
 
 @login_required

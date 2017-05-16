@@ -53,14 +53,15 @@ class Curso(models.Model):
 		return	participantes
 
 class Participante(models.Model):
-	nome_completo = models.CharField("Nome completo", max_length=256 )
+	nome_completo = models.CharField("Nome completo", max_length=256)
+	cpf = models.CharField("CPF", max_length=16)
 	faculdade = models.ForeignKey(Faculdade)
 	curso = models.ForeignKey(Curso)
 	ano_ingresso = models.IntegerField("Ano de ingresso")
 	e_mail = models.EmailField("E-mail")
 	telefone = models.CharField("Telefone", max_length=16)
 	moleskine = models.NullBooleanField()
-	mochila = models.NullBooleanField()
+	lancheira = models.NullBooleanField()
 	aceita_divulgacao = models.NullBooleanField()
 	ong = models.NullBooleanField()
 	def __unicode__(self):
@@ -138,13 +139,12 @@ class PontodeVenda(models.Model):
 class Compra(models.Model):
 	participante = models.ForeignKey(Participante)
 	atividade = models.ForeignKey(Atividade)
-	# tipo = models.CharField(choices = tipos_de_compras, max_length=64, default = "----", null = True, blank = True)
 	local = models.ForeignKey(PontodeVenda, null=True, blank = True)
 	vendedor = models.ForeignKey(Vendedor, null=True, blank = True)
 	preco_pagar = models.IntegerField("Preco", null=True, blank=True)
 	presente = models.BooleanField(default = False)
 	comprado = models.BooleanField(default = False)
-	reservado = models.BooleanField(default = False)
+	#reservado = models.BooleanField(default = False)
 	cortesia = models.BooleanField(default = False)
 
 

@@ -37,12 +37,6 @@
                               <h1>Dados pessoais</h1>
                               <div class="row">
                                   <div class="bio-row">
-                                      <p><span>Telefone: </span> {{participante.telefone}}</p>
-                                  </div>
-                                  <div class="bio-row">
-                                      <p><span>E-mail: </span> {{participante.e_mail}}</p>
-                                  </div>
-                                  <div class="bio-row">
                                       <p><span>Faculdade: </span> {{participante.faculdade}}</p>
                                   </div>
                                   <div class="bio-row">
@@ -51,6 +45,17 @@
                                   <div class="bio-row">
                                       <p><span>Ingresso: </span> {{participante.ano_ingresso}}</p>
                                   </div>
+                                  <div class="bio-row">
+                                      <p><span>Telefone: </span> {{participante.telefone}}</p>
+                                  </div>
+                                  <div class="bio-row">
+                                      <p><span>E-mail: </span> {{participante.e_mail}}</p>
+                                  </div>
+                                  <div class="bio-row">
+                                      <p><span>CPF: </span> {{participante.cpf}}</p>
+                                  </div>
+
+
 
                                   {%if moleskine%}
                                     <div class="bio-row">
@@ -63,13 +68,13 @@
 
                                   {%endif%}
 
-                                  {%if mochila%}
+                                  {%if lancheira%}
                                     <div class="bio-row">
-                                      <p> Já possui mochila.</p>
+                                      <p> Já possui lancheira.</p>
                                     </div>
                                   {%else%}
                                     <div class="bio-row">
-                                    <p> Não possui mochila.</p>
+                                    <p> Não possui lancheira.</p>
                                     </div>
 
                                   {%endif%}
