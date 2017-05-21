@@ -23,7 +23,7 @@
 <div class="container login-bg">
 
 <form action="/login/" class="login-form-signin" method="POST">{%csrf_token%}
-  <div class="login-logo" style="background:black"><img src="/static/images/sergio26.png" height="80%" width="80%"></div>
+  <div class="login-logo"><img src="/static/images/sergio26.png" height="80%" width="80%"></div>
     {# <h2 class="login-form-signin-heading">Login Your Account</h2> #}
         <div class="login-wrap">
             <input type="text" autofocus placeholder="Usuário" class="form-control" {{login_form.usuario}}

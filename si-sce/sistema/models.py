@@ -25,6 +25,7 @@ dia = (
 class Usuario(models.Model):
 	nome = models.CharField("Usuario", max_length=64)
 	usuario = models.OneToOneField(User, related_name = 'usuario')
+
 	def __unicode__(self):
 		return self.nome
 
@@ -94,18 +95,18 @@ class Atividade(models.Model):
 
 	def cap_atual(self):
 		compradas = Compra.objects.filter(atividade__nome=self.nome, comprado=True).count()
-		reservadas = Compra.objects.filter(atividade__nome=self.nome, reservado=True).count()
+		# reservadas = Compra.objects.filter(atividade__nome=self.nome, reservado=True).count()
 		cortesias = Compra.objects.filter(atividade__nome=self.nome, cortesia=True).count()
 		cap_inicial = self.cap_participantes
 		overbooking = self.overbooking
-		cap_atual = cap_inicial + overbooking - reservadas - cortesias - compradas
+		cap_atual = cap_inicial + overbooking - cortesias - compradas
 
 		return	cap_atual
 
-	def reservas(self):
-		reservas = Compra.objects.filter(atividade__nome=self.nome, reservado=True).count()
+	# def reservas(self):
+	# 	reservas = Compra.objects.filter(atividade__nome=self.nome, reservado=True).count()
 
-		return reservas
+	# 	return reservas
 
 	def vendas(self):
 		vendidos = Compra.objects.filter(atividade__nome=self.nome, comprado=True).count()
@@ -146,5 +147,6 @@ class Compra(models.Model):
 	comprado = models.BooleanField(default = False)
 	#reservado = models.BooleanField(default = False)
 	cortesia = models.BooleanField(default = False)
+	pontos = models.IntegerField("Pontos", null=True, blank=True)
 
 

@@ -388,9 +388,9 @@ def vendedor_cadastrar(request):
 	if request.method == 'POST':
 		vendedor_form = CriarVendedorForm(request.POST)
 		if vendedor_form.is_valid():
-			vendedor.pontos = 0
 			vendedor = vendedor_form.save(commit = False)
 			try:
+				vendedor.pontos = 0
 				vendedor.save()
 			except:
 				return HttpResponse("<script>alert('Já existe um vendedor com este nome.');javascript:history.back();</script>")
@@ -412,17 +412,16 @@ def vendedor_listar(request):
 	if usuario.is_superuser ==True:
 		adm= True
 	vendedores = Vendedor.objects.all()
-	# for vendedor in vendedores:
-	# 	vendedor.pontos = 0
-	# 	vendedor.save()
-	# 	vendas = Compra.objects.filter(comprado = True, vendedor = vendedor)
-	# 	cortesias = Compra.objects.filter(cortesia = True, vendedor = vendedor)
-	# 	for venda in vendas:
-	# 		vendedor.pontos+= venda.atividade.pont_vendas
-	# 		vendedor.save()
-	# 	for cortesia in cortesias:
-	# 		vendedor.pontos+= cortesia.atividade.pont_vendas
-	# 		vendedor.save()
+	for vendedor in vendedores:
+		vendedor.pontos = 0
+		vendas = Compra.objects.filter(comprado = True, vendedor = vendedor)
+		cortesias = Compra.objects.filter(cortesia = True, vendedor = vendedor)
+		for venda in vendas:
+			vendedor.pontos+= venda.pontos
+			vendedor.save()
+		for cortesia in cortesias:
+			vendedor.pontos+= cortesia.pontos
+			vendedor.save()
 	lista_vendedor = Vendedor.objects.all().order_by('-pontos')
 	return render (request, 'vendedor_lista.html', locals())
 
@@ -602,7 +601,7 @@ def atividade_editar(request, id_atividade):
 # 	return HttpResponseRedirect('/lista_reserva/'+str(id_atividade))
 
 
-
+@permission_required('sistema.is_admin')
 @login_required
 def lista_presenca(request, id_atividade):
 	adm=False
@@ -611,7 +610,7 @@ def lista_presenca(request, id_atividade):
 		adm= True
 	atividade_selecionada = Atividade.objects.get(id = id_atividade)
 	lista_itens = Compra.objects.filter(Q(comprado=True, atividade = atividade_selecionada) | Q(cortesia = True, atividade = atividade_selecionada))
-	compraram = Compra.objects.filter(Q(comprado=True, atividade = atividade_selecionada) | Q(cortesia = True, atividade = atividade_selecionada)).count()
+	compraram = lista_itens.count()
 
 	lista_form = []
 	post=False
@@ -630,11 +629,9 @@ def lista_presenca(request, id_atividade):
 			post=True
 			lista_presenca_form = ListaPresencaForm(request.POST, instance = compra, prefix=str(compra.participante.id))
 			lista_presenca = lista_presenca_form.save()
-		# return HttpResponseRedirect('/atividade_lista/')
 	if post:
 		return HttpResponseRedirect('/lista_presenca/%s' % str(atividade_selecionada.id))
 	return render (request, 'lista_presenca.html', locals())
-
 
 
 @login_required
@@ -649,10 +646,13 @@ def lista_compra(request, id_participante):
 	lista_cortesia = Compra.objects.filter(participante = participante_selecionado).filter(cortesia=True)
 	#lista_reservados = Compra.objects.filter(participante = participante_selecionado).filter(reservado=True)
 	lista_form = []
+	lista_vendedor = [] #roda mais uma lista para nao alterar os pontos dos vendedores a cada nova compra
 	valor = 0
 
 
 	for compra in lista_itens:
+		if compra.comprado == False and compra.cortesia == False:
+			lista_vendedor.append(compra)
 
 
 		lista_form.append([compra.atividade, CompraForm(instance = compra, prefix=str(compra.atividade.id))])
@@ -673,9 +673,6 @@ def lista_compra(request, id_participante):
 					compra.cortesia = False
 					compra.save()
 
-					# vendedor = Vendedor.objects.get(nome = compra.vendedor.id)
-					# vendedor.pontos += compra.atividade.pont_vendas
-					# vendedor.save()
 
 					return HttpResponse("<script>alert('Existe mais de uma caixa selecionada em algum dos ingressos.');javascript:history.back();</script>")
 
@@ -686,15 +683,19 @@ def lista_compra(request, id_participante):
 					lista_form.append([compra2.atividade, CompraForm(instance = compra2, prefix=str(compra2.atividade.id))])
 				compra = compra_form.save()
 				# foi retirado compra.reservado ==True
-				if compra.comprado==True or compra.cortesia==True:
+				if compra.comprado or compra.cortesia:
 					compra.comprado = False
 					#compra.reservado = False
 					compra.cortesia = False
 					compra.save()
 					return HttpResponse("<script>alert('Atividade lotada!');javascript:history.back();</script>")
 
-			if compra.comprado == True:
+			if compra.comprado:
 				valor = valor + compra.atividade.preco
+	for nova_compra in lista_vendedor:
+		if nova_compra.comprado or nova_compra.cortesia:
+			nova_compra.pontos = nova_compra.atividade.pont_vendas
+			nova_compra.save()
 
 
 

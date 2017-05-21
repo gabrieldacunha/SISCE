@@ -3,9 +3,9 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
 from django.contrib import admin
-#from django.views.generic.simple import direct_to_template
 from sistema import views
 import os
+#from django.views.generic.simple import direct_to_template
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^base/$', views.base),
     url(r'^login/$', views.login_user),
+    # url(r'^login2/$', views.login_user2),
     url(r'^$', views.home),
     url(r'^logout/$', views.logout_user),
     url(r'^home/$', views.home),

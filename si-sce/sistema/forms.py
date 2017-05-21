@@ -8,7 +8,11 @@ from django.forms import ModelForm, TextInput, Select
 from django.forms.formsets import formset_factory
 from django.forms.models import inlineformset_factory
 
+# class LogarPontodeVendaForm(forms.ModelForm):
 
+#     class Meta:
+#         model = Usuario
+#         fields = ['local']
 
 class CriarParticipanteForm(forms.ModelForm):
 
@@ -61,7 +65,6 @@ class CompraForm(forms.ModelForm):
     class Meta:
         model = Compra
         fields = ['comprado',
-         'reservado',
          'cortesia',
          'local',
          'vendedor']

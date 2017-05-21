@@ -32,8 +32,9 @@ input[type="checkbox"] {
                                     <th>Dia</th>
                                     <th>Horário</th>
                                     <th>Vagas</th>
-                                    <th>Reservas</th>
+                                    <!-- <th>Reservas</th> -->
                                     <th>Vendas</th>
+                                    <th>Pontos</th>
                                     <th>Comprar</th>
                                     <!-- <th>Reservar</th> -->
                                     <th>Cortesia</th>
@@ -50,8 +51,9 @@ input[type="checkbox"] {
                                     <td>{{lista.0.dia}}</td>
                                     <td>{{lista.0.horario}}</td>
                                     <td>{{lista.0.cap_atual}}</td>
-                                    <td>{{lista.0.reservas}}</td>
+                                    <!-- <td>{{lista.0.reservas}}</td> -->
                                     <td>{{lista.0.vendas}}</td>
+                                    <td>{{lista.0.pont_vendas}}</td>
                                     <td>{{lista.1.comprado}}</td>
                                     <!-- <td>{{lista.1.reservado}}</td> -->
                                     <td>{{lista.1.cortesia}}</td>
@@ -112,7 +114,7 @@ input[type="checkbox"] {
         <p align = "center">Valor total: R${{valor}},00 </p>
     </div>
     {%endif%}
-    {%if lista_reservados %}
+    <!-- {%if lista_reservados %}
     <div class="box-info">
         <h3><b>Reservados {{participane_selecionado.nome.capitalize}}</b></h3>
              <hr>
@@ -134,8 +136,8 @@ input[type="checkbox"] {
                                     <td>{{lista.atividade.dia}}</td>
                                     <td>{{lista.atividade.horario}}</td>
                                     <td>{{lista.vendedor}}
-                                    <!--<td><a href="/aluno_visualizar/{{item.id}}"> Ver Descricao </a></td>
-                                <td><a href="/aluno_deletar/{{item.id}} " OnClick= "return confirm('Tem certeza que quer excluir este cadastro? Esta ação não poderá ser desfeita.')">Excluir</a></td> -->
+                                    <td><a href="/aluno_visualizar/{{item.id}}"> Ver Descricao </a></td>
+                                <td><a href="/aluno_deletar/{{item.id}} " OnClick= "return confirm('Tem certeza que quer excluir este cadastro? Esta ação não poderá ser desfeita.')">Excluir</a></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -144,7 +146,7 @@ input[type="checkbox"] {
 
         </div>
     </div>
-    {%endif%}
+    {%endif%} -->
     {%if lista_cortesia %}
     <div class="box-info">
         <h3><b>Cortesia {{participane_selecionado.nome.capitalize}}</b></h3>

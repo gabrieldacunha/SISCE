@@ -1146,7 +1146,8 @@ i.warning {
 	border-radius: 30px;
 }
 .btn-primary, .btn-primary:focus {
-	background-color: #263248;
+	background-color:#c55910;
+	/* background-color: #263248; */
 	border-color: rgba(0, 0, 0, 0);
 	color: #FFFFFF;
 }
@@ -2275,9 +2276,11 @@ h3.timeline-title {
 }
 .login-wrap {
 	padding: 20px;
+	background: #ff8533;
+
 }
 .login-logo {
-	background: #1e293d;
+	/* background: #FFFFFF; */
 	text-align: center;
 	padding: 10px 0;
 }
