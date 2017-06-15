@@ -712,13 +712,11 @@ def tabela_relatorios(request):
 		adm= True
 	participantes = Participante.objects.all()
 	cadastrados = Participante.objects.all().count()
-	interessados_ong = Participante.objects.filter(ong=True)
-	num_ong = Participante.objects.filter(ong=True).count()
+	interessados_ong = Participante.objects.filter(ong=True).count()
 	try:
-		porcentagem_ong = num_ong*100/cadastrados
+		porcentagem_ong = interessados_ong*100/cadastrados
 	except:
 		porcentagem_ong = 0
-	mailing = Participante.objects.filter(aceita_divulgacao=True)
 	num_mailing = Participante.objects.filter(aceita_divulgacao=True).count()
 	try:
 		porcentagem_mailing = num_mailing*100/cadastrados
@@ -728,6 +726,10 @@ def tabela_relatorios(request):
 	moleskines = 0
 	lancheiras = 0
 	candidatos_lancheira = 0
+	candidatos_excel = 0
+	vendidos = 0
+	num_cortesias = 0
+	compareceram = 0
 	for participante in participantes:
 		if participante.moleskine:
 			moleskines += 1
@@ -735,59 +737,64 @@ def tabela_relatorios(request):
 			lancheiras += 1
 
 		pagou = Compra.objects.filter(participante = participante, comprado =True).count()
+		vendidos+=pagou
 		ganhou = Compra.objects.filter(participante = participante, cortesia =True).count()
-		pegou_atividade = pagou + ganhou
-
-		if pegou_atividade > 0:
+		num_cortesias+=ganhou
+		num_atividades = pagou + ganhou
+		if num_atividades > 4:
 			tem_ingressos+=1
-		if pegou_atividade > 4:
 			candidatos_lancheira += 1
+		elif num_atividades > 0:
+			tem_ingressos+=1
+		try:
+			participou = Compra.objects.filter(presente=True, participante = participante).count()
+			if participou > 2:
+				compareceram +=1
+				candidatos_excel+=1
+			elif participou > 0:
+				compareceram +=1
+		except:
+			pass
+	ingressos = vendidos + num_cortesias
+	lugares_ocupados = Compra.objects.filter(presente=True).count()
+	try:
+		abstencao_atividades = 100-((lugares_ocupados*100)/ingressos)
+	except:
+		abstencao_atividades = 0
 
 	try:
 		porcentagem_ingressos = 100*tem_ingressos/cadastrados
 	except:
 		porcentagem_ingressos = 0
-	presencas = Compra.objects.filter(presente=True).count()
+
+	try:
+		abstencao_participantes = 100-((compareceram*100)/tem_ingressos)
+	except:
+		abstencao_participantes = 0
+
 	lista_comprados = Compra.objects.filter(comprado=True)
 	#lista_reservados = Compra.objects.filter(reservado=True)
 	lista_cortesias = Compra.objects.filter(cortesia=True)
-	num_site = Compra.objects.filter(cortesia=True, local__id = 3).count()
+	num_site = Compra.objects.filter(comprado=True, local__id = 3).count()
+	lista_site = Compra.objects.filter(comprado=True, local__id = 3)
 	#num_reservados = Compra.objects.filter(reservado=True).count()
-
-	dinheiro = 0
+	valor_total = 0
+	valor_fisico = 0
+	valor_online = 0
 	previsao = 0
 	valor_cortesias = 0
-	valor_site = 0
+	for comprado in lista_site:
+		valor_online+=comprado.atividade.preco
 	for comprado in lista_comprados:
-		dinheiro+=comprado.atividade.preco
+		valor_total+=comprado.atividade.preco
+	valor_fisico = valor_total - valor_online
+	valor_online = valor_online - num_site
+	valor_total = valor_fisico + valor_online
 	# for reservado in lista_reservados:
 	# 	previsao+=reservado.atividade.preco
 	for cortesia in lista_cortesias:
-		try:
-			if cortesia.local.id != 3:
-				cortesias+=cortesia.atividade.preco
-			else:
-				valor_site += cortesia.atividade.preco
-		except:
-			valor_cortesias+=cortesia.atividade.preco
+		valor_cortesias+=cortesia.atividade.preco
 
-	vendidos = Compra.objects.filter(comprado = True).count()
-	num_cortesias = Compra.objects.filter(cortesia = True).count() - num_site
-	ingressos = vendidos + num_cortesias + num_site
-
-	try:
-		abstencao = 100-((presencas*100)/ingressos)
-	except:
-		abstencao = 0
-	compareceram = 0
-
-	for participante in participantes:
-		try:
-			participou = Compra.objects.filter(presente=True, participante = participante).count()
-			if participou > 0:
-				compareceram = compareceram + 1
-		except:
-			pass
 	return render(request, 'tabela_relatorios.html', locals())
 
 # @login_required
@@ -833,6 +840,44 @@ def lista_emails (request, id_atividade):
 	workbook.save(response)
 	return response
 
+@login_required
+@permission_required('sistema.is_admin')
+def lista_excel (request):
+	participantes = Participante.objects.all()
+	lista_excel = []
+	for participante in participantes:
+		atividades = Compra.objects.filter(participante = participante, presente=True).count()
+		if atividades >=3:
+			lista_excel.append(participante)
+
+
+	workbook = xlwt.Workbook()
+	worksheet = workbook.add_sheet(u'Candidatos ao curso de Excel')
+
+	worksheet.write(0, 0, u'ID')
+	worksheet.write(0, 1, u'Nome')
+	worksheet.write(0, 2, u'Email')
+	worksheet.write(0, 3, u'Telefone')
+	worksheet.write(0, 4, u'Faculdade')
+	worksheet.write(0, 5, u'Curso')
+	worksheet.write(0, 6, u'Ano de Ingresso')
+
+	i=1
+	for participante in lista_excel:
+		worksheet.write(i + 1, 0, i)
+		worksheet.write(i + 1, 1, participante.nome_completo)
+		worksheet.write(i + 1, 2, participante.e_mail)
+		worksheet.write(i + 1, 3, participante.telefone)
+		worksheet.write(i + 1, 4, participante.faculdade.nome)
+		worksheet.write(i + 1, 5, participante.curso.nome)
+		worksheet.write(i + 1, 6, participante.ano_ingresso)
+
+		i=i+1
+
+	response = HttpResponse(mimetype='application/vnd.ms-excel')
+	response['Content-Disposition'] = 'attachment; filename=Sorteio Excel.xls'
+	workbook.save(response)
+	return response
 
 @login_required
 @permission_required('sistema.is_admin')
@@ -906,22 +951,31 @@ def lista_mailing (request):
 @permission_required('sistema.is_admin')
 def lista_brindes (request):
 	lista_emails = []
+	lista_emails2 = []
 	participantes = Participante.objects.all()
 	for participante in participantes:
 		compras = Compra.objects.filter(comprado=True, participante= participante).count()
 		if compras > 0:
-			if not participante.moleskine == True:
+			if participante.moleskine == False:
 				lista_emails.append(participante.e_mail + "; ")
+		if compras >= 5:
+			if participante.lancheira == False:
+				lista_emails2.append(participante.e_mail + "; ")
 
 	workbook = xlwt.Workbook()
-	worksheet = workbook.add_sheet(u'Email Moleskine')
+	worksheet = workbook.add_sheet(u'Email Brindes')
 
 	worksheet.write(0, 0, u'Participantes sem moleskine')
 
 	worksheet.write(1, 0, lista_emails)
 
+	worksheet.write(0, 1, u'Participantes sem lancheira')
+
+	worksheet.write(1, 1, lista_emails2)
+
+
 	response = HttpResponse(mimetype='application/vnd.ms-excel')
-	response['Content-Disposition'] = 'attachment; filename=Moleskine.xls'
+	response['Content-Disposition'] = 'attachment; filename=Pessoas sem brinde.xls'
 	workbook.save(response)
 	return response
 
@@ -950,7 +1004,7 @@ def relatorio_vendedores (request):
 @permission_required('sistema.is_admin')
 def relatorio_geral (request):
 	participantes = Participante.objects.all()
-	tamanho = Participante.objects.all().count()
+	num_participantes = Participante.objects.all().count()
 	workbook = xlwt.Workbook()
 	worksheet = workbook.add_sheet(u'Participantes')
 
@@ -1002,7 +1056,7 @@ def relatorio_geral (request):
 
 	worksheet2.write(0, 0, u'Ponto de Venda')
 	worksheet2.write(0, 1, u'Número de Inscritos')
-	worksheet2.write(0, 1, u'Ingressos Vendidos')
+	worksheet2.write(0, 2, u'Ingressos Vendidos')
 	i=0
 	for local in ponto_lista:
 		inscritos = 0
@@ -1107,21 +1161,33 @@ def relatorio_geral (request):
 
 	worksheet6 = workbook.add_sheet(u'Relatório Final')
 	lista_presentes=[]
-	valor = 0
+	valor_comprado = 0
+	valor_doado = 0
 	vendas = Compra.objects.filter(comprado=True).count()
-	compras = Compra.objects.filter(comprado=True)
-	for compra in compras:
-		if compra.comprado == True:
-			valor = valor + compra.atividade.preco
+	cortesias = Compra.objects.filter(cortesia=True).count()
+	distribuidos = cortesias + vendas
+	compras = Compra.objects.filter(comprado =True)
+	doacoes = Compra.objects.filter(cortesia =True)
+	for item in compras:
+		valor_comprado += item.atividade.preco
+	for item in doacoes:
+		valor_doado += item.atividade.preco
 
+	pagantes = 0
+	doadores = 0
 	clientes = 0
 	presentes = 0
 	for participante in participantes:
 
 		pagou = Compra.objects.filter(participante = participante, comprado =True).count()
+		doou = Compra.objects.filter(participante = participante, cortesia =True).count()
 		presente = Compra.objects.filter(participante = participante, presente =True).count()
 		if pagou > 0:
-			clientes+=1
+			pagantes+=1
+		if doou > 0:
+			doadores+=1
+		if pagou or doou:
+			clientes += 1
 		if presente > 0:
 			presentes+=1
 
@@ -1134,7 +1200,7 @@ def relatorio_geral (request):
 		abstencao = u'100%'
 
 	try:
-		porcentagem_presenca = presentes*100/tamanho
+		porcentagem_presenca = presentes*100/num_participantes
 		abstencao2 = str(100-porcentagem_presenca) + u'%'
 	except:
 		porcentagem_presenca = 0
@@ -1143,24 +1209,34 @@ def relatorio_geral (request):
 
 
 	worksheet6.write(0, 0, u'Lugares preenchidos')
-	worksheet6.write(0, 1, u'Total de vendas')
-	worksheet6.write(0, 2, u'Valor arrecadado')
-	worksheet6.write(0, 3, u'Abstenção (atividades)')
-	worksheet6.write(0, 4, u'Cadastros')
-	worksheet6.write(0, 5, u'Clientes')
-	worksheet6.write(0, 6, u'Participantes')
-	worksheet6.write(0, 7, u'Abstenção (participantes)')
+	worksheet6.write(0, 1, u'Ingressos distribuídos')
+	worksheet6.write(0, 2, u'Ingressos comprados')
+	worksheet6.write(0, 3, u'Ingressos de cortesia')
+	worksheet6.write(0, 4, u'Valor de vendas')
+	worksheet6.write(0, 5, u'Valor de doações')
+	worksheet6.write(0, 6, u'Abstenção (atividades)')
+	worksheet6.write(0, 7, u'Cadastros')
+	worksheet6.write(0, 8, u'Pegaram ingressos')
+	worksheet6.write(0, 9, u'Pagantes')
+	worksheet6.write(0, 10, u'Doadores')
+	worksheet6.write(0, 11, u'Participantes')
+	worksheet6.write(0, 12, u'Abstenção (participantes)')
 
 
 
 	worksheet6.write(1, 0, participacoes)
-	worksheet6.write(1, 1, vendas)
-	worksheet6.write(1, 2, valor)
-	worksheet6.write(1, 3, abstencao)
-	worksheet6.write(1, 4, tamanho)
-	worksheet6.write(1, 5, clientes)
-	worksheet6.write(1, 6, presentes)
-	worksheet6.write(1, 7, abstencao2)
+	worksheet6.write(1, 1, distribuidos)
+	worksheet6.write(1, 2, vendas)
+	worksheet6.write(1, 3, cortesias)
+	worksheet6.write(1, 4, valor_comprado)
+	worksheet6.write(1, 5, valor_doado)
+	worksheet6.write(1, 6, abstencao)
+	worksheet6.write(1, 7, num_participantes)
+	worksheet6.write(1, 8, clientes)
+	worksheet6.write(1, 9, pagantes)
+	worksheet6.write(1, 10, doadores)
+	worksheet6.write(1, 11, presentes)
+	worksheet6.write(1, 12, abstencao2)
 
 
 

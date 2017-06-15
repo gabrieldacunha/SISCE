@@ -9,28 +9,29 @@
 
 
     	<hr>
-        Dinheiro arrecadado: R$ {{dinheiro}},00<br>
+        Valor arrecadado total: R$ {{valor_total}},00<br>
+        Valor arrecadado em vendas físicas: R$ {{valor_fisico}},00<br>
+        Valor arrecadado em vendas online: R$ {{valor_online}},00<br>
         <!-- Reservas: {{num_reservados}} (R$ {{previsao}},00)<br> -->
-        Cortesias (doações): {{num_cortesias}} (R$ {{valor_cortesias}},00)<br>
-        Vendas online: {{num_site}} (R$ {{valor_site}},00) <br>
+        Doações: {{num_cortesias}} (Equivalente a R$ {{valor_cortesias}},00)<br>
         Ingressos distribuidos: {{ingressos}}<br>
-        Presenças em atividades: {{presencas}} ({{abstencao}}% de abstenção)
+        Lugares ocupados: {{lugares_ocupados}} ({{abstencao_atividades}}% de abstenção)
         <hr>
         Número de cadastros: {{cadastrados}}<br>
-        Pegaram ingressos: {{tem_ingressos}} ({{porcentagem_ingressos}}%)<br>
-        Compareceram em atividades: {{compareceram}}<br><br>
+        Pegaram ingressos: {{tem_ingressos}} ({{porcentagem_ingressos}}% dos cadastrados)<br>
+        Compareceram em atividades: {{compareceram}} ({{abstencao_participantes}}% de abstenção)<br>
         Marcados que pegaram moleskine: {{moleskines}}<br>
-        Marcados que pegaram mochila: {{mochilas}}<br>
+        Marcados que pegaram lancheira: {{lancheiras}}<br>
         Podem retirar lancheira: {{candidatos_lancheira}}<br>
-
-        Querem saber sobre a ONG: {{num_ong}} ({{porcentagem_ong}}% dos cadastrados)<br>
+        Querem saber sobre a ONG: {{interessados_ong}} ({{porcentagem_ong}}% dos cadastrados)<br>
         Mailing list: {{num_mailing}} ({{porcentagem_mailing}}% dos cadastros)
         <hr><br>
         <button class="btn btn-warning" type="button" style="border-radius: 1em;"><a href="/relatorio_geral/" style="text-decoration: none; color: white;">Baixar relatório geral</a></button><br>
         <hr>
         <a href="/lista_ong/">Baixar lista de emails de quem se interessou pela ONG</a><br><br>
+        <a href="/lista_excel/">Baixar lista de candidatos ao curso de Excel</a><br><br>
         <a href="/lista_mailing/">Baixar Mailing List</a><br><br>
-        <a href="/lista_canecas/">Baixar lista de emails de quem comprou atividade e não ganhou brinde</a> ({{sem_brinde}})
+        <a href="/lista_brindes/">Baixar lista de emails de quem comprou atividade e não ganhou brinde</a>
         </div></div>
 
 {% endblock conteudo %}

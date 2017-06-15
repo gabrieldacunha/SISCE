@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{%block conteudo%}
+<style>
+
+input[type="checkbox"] {
+    height: 20px;
+    width:20px;
+}
+</style>
+<div class="scrollable wrapper">
+        <div class="box-info">
+             <h3><b>Lista de presença </b>- <i>{{atividade_selecionada.nome.capitalize}}</i> {%if adm%}<br><br><a href="/lista_emails/{{atividade_selecionada.id}}/"><button type="button" class="btn btn-warning" style="border-radius:1em">Enviar e-mail de confirmação</button></a> <a href="/relatorio_atividade2/{{id_atividade}}"><button type="button" class="btn btn-warning" style="border-radius:1em"> Imprimir lista de presença</button></a>{%endif%} <br></h3>
+             <hr>
+
+            <div class="widget-content no-padding" style="overflow-x: auto;">
+                <div class="widget-content-inner">
+                <form method= "POST" action ="/lista_presenca/{{atividade_selecionada.id}}/" data-ajax="false" class="form-horizontal" enctype="multipart/form-data"> {% csrf_token %}
+                    <table class="display table table-bordered table-striped table-hover dataTable" id="tabela-presenca" >
+                        <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Telefone</th>
+                                    <th>E-mail</th>
+                                    <th>Faculdade</th>
+                                    <th>Curso</th>
+                                    <th>Presença</th>
+
+                                    <th>Presença2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for lista in lista_form %}
+                                <tr class="">
+                                    <td>{{lista.0.nome_completo}}</td>
+                                    <td>{{lista.0.telefone}}</td>
+                                    <td>{{lista.0.e_mail}}</td>
+                                    <td>{{lista.0.faculdade}}</td>
+                                    <td>{{lista.0.curso}}</td>
+                                    <td><a href="/participante_presente/{{atividade.id}}/{{lista.0.id}}" OnClick= "return confirm('Tem certeza que quer excluir este cadastro? Esta ação não poderá ser desfeita.')"><button type="button" class="btn btn-warning" style="border-radius:1em">Excluir</button></a></td>
+
+
+                                    <td>{{lista.1.presente}}</td>
+
+                                    <!--<td><a href="/aluno_visualizar/{{item.id}}"> Ver Descricao </a></td>
+                                <td><a href="/aluno_deletar/{{item.id}} " OnClick= "return confirm('Tem certeza que quer excluir este cadastro? Esta ação não poderá ser desfeita.')">Excluir</a></td> -->
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table><br>
+                </div>
+            </div>
+
+        </div>
+                        <div align="center">
+                        <button type="submit" class="btn btn-warning" style="border-radius:1em; align:center"  OnClick= "return confirm('Limpou o campo de busca antes de salvar?')">Salvar</button>
+                        </div>
+                        </form>
+
+
+
+
+        </div>
+        <div class="scrollable wrapper">
+
+        <div class="box-info">
+        <h3><b>Compareceram à atividade</b> {# <i>{{atividade_selecionada.nome.capitalize}}</i>  #}{{porcentagem_presenca}}% do esperado</h3>
+             <hr>
+            <div class="widget-content no-padding">
+                <div class="widget-content-inner">
+                    <table class="display table table-bordered table-striped table-hover dataTable" id="tabela-presenca2" >
+                        <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Telefone</th>
+                                    <th>E-mail</th>
+                                    <th>Faculdade</th>
+                                    <th>Curso</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for lista in lista_presentes %}
+                                <tr class="odd gradeA">
+                                    <td>{{lista.0.nome_completo}}</td>
+                                    <td>{{lista.0.telefone}}</td>
+                                    <td>{{lista.0.e_mail}}</td>
+                                    <td>{{lista.0.faculdade}}</td>
+                                    <td>{{lista.0.curso}}</td>
+                                    <!--<td><a href="/aluno_visualizar/{{item.id}}"> Ver Descricao </a></td>
+                                <td><a href="/aluno_deletar/{{item.id}} " OnClick= "return confirm('Tem certeza que quer excluir este cadastro? Esta ação não poderá ser desfeita.')">Excluir</a></td> -->
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+        </div>
+    </div>
+    {%if adm%}
+    <div align="center">
+    <td><a href="/relatorio_atividade/{{id_atividade}}"><button type="button" class="btn btn-warning" style="border-radius:1em">Gerar excel</button></a></td>
+    </div><br><br>
+    {%endif%}
+    </div>
+{%endblock conteudo%}
+</html>
